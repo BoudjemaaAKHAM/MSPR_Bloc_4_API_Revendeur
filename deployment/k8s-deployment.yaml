@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  # define deployment name and the desired namespace
+  name: revendeur-api
+  namespace: services
+spec:
+  # define the number of replicas. With this parameter we can scale the application.
+  replicas: 1
+  selector:
+    matchLabels:
+      bb: revendeur-api
+  template:
+    metadata:
+      labels:
+        bb: revendeur-api
+    spec:
+      containers:
+        # define the container name and the image to use for the container. In this case our api image is hosted on docker hub.
+        - name: revendeur-api
+          image: boudjemaa/revendeur_api:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 82
