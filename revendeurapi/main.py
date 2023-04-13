@@ -59,6 +59,7 @@ def read_root():
     """
     return {"Hello": "World"}
 
+
 # routes produits
 
 
@@ -80,7 +81,21 @@ def get_product(product_id: int):
     return response.json()
 
 
+@app.post("/create-user/{user_email}", tags=["users"])
+def create_user(user_email: str):
+    """
+    Create a user
+    """
+    # je génère une clé d'authentification que je pourrais utiliser ensuite pour autoriser l'utilisateur à utiliser l'api
+    # je stocke la clé dans la base de données sqlite et j'envoie un mail à l'utilisateur avec le qr code
+    # le token étant stocké dans la base de données, je peux l'utiliser pour vérifier l'authentification de l'utilisateur prochainement
+    # retourner un code 200 si tout s'est bien passé
+    # retourne un autre code si erreur
+
+    return {"status": "success"}
+
+
 if __name__ == "__main__":
-    #logging.basicConfig(filename='server.log', level=logging.INFO)
+    # logging.basicConfig(filename='server.log', level=logging.INFO)
     uvicorn.run(app, host="0.0.0.0", port=82, log_level="debug", access_log=True)
-    #uvicorn.run(app)
+    # uvicorn.run(app)
