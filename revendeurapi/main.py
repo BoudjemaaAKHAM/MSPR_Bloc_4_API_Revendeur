@@ -114,17 +114,18 @@ def create_user(user_id: int, user_email: str):
     # retourne un autre code si erreur
 
     if not is_valid_email(user_email):
-        return {"status": "error", "message": "Invalid email"}
+        return {"status": "error", "message": "Invalid email format"}
     try:
         decoded_email = unquote(user_email)
         token = encode_token(decoded_email)
         if db.insert_user(user_id, decoded_email, token) is False:
-            return {"status": "error", "message": "User already exists on the database"}
+            return {"status": "error", "message": f"User with id {user_id} already exists on the database"}
         generate_qr_code(token, "", "qrcode")
         send_email(decoded_email, "./qrcode.png")
-        return {"status": "success"}
+        return {"status": "success",
+                "message": f"User with id {user_id} has been created. Check your email for the QR code"}
     except Exception as e:
-        return {"status": "error", "message": e}
+        return {"status": "error", "message": e.__repr__()}
 
 
 @app.delete("/delete-user/{user_id}", tags=["users"])
@@ -134,8 +135,12 @@ def delete_user(user_id: int):
     :param user_id:
     :return:
     """
-
-    return {"status": "success"}
+    try:
+        if db.delete_user(user_id) is False:
+            return {"status": "error", "message": f"User with id {user_id} does not exist on the database"}
+        return {"status": "success", "message": f"User with id {user_id} has been deleted"}
+    except Exception as e:
+        return {"status": "error", "message": e.__repr__()}
 
 
 @app.put("/update-user/{user_id}", tags=["users"])

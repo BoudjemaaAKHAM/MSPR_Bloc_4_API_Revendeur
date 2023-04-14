@@ -79,3 +79,16 @@ class Db:
         query = '''SELECT * FROM users WHERE email = ?'''
         self.cursor.execute(query, (email,))
         return self.cursor.fetchone()
+
+    def delete_user(self, user_id):
+        """
+        Delete a user by id
+        :param user_id:
+        :return:
+        """
+        query = '''DELETE FROM users WHERE id = ?'''
+        # si l'utilisateur n'existe pas
+        if self.get_user(user_id) is None:
+            return False
+        self.cursor.execute(query, (user_id,))
+        self.conn.commit()
