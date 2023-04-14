@@ -64,6 +64,7 @@ async def read_items(token: Annotated[str, Depends(oauth2_scheme)]):
 def get_products():
     """
     Get all products
+    :return:
     """
     response = requests.get(API_PRODUCT)
     return response.json()
@@ -73,9 +74,22 @@ def get_products():
 def get_product(product_id: int):
     """
     Get a product by id
+    :param product_id:
+    :return:
     """
     response = requests.get(API_PRODUCT + "/" + str(product_id))
     return response.json()
+
+
+@app.get("/products/{product_id}/stock", tags=["products"])
+def get_product_stock(product_id: int):
+    """
+    Get a product stock by id
+    :param product_id:
+    :return:
+    """
+    response = requests.get(API_PRODUCT + "/" + str(product_id))
+    return response.json()["stock"]
 
 
 @app.post("/create-user/{user_email}", tags=["users"])
