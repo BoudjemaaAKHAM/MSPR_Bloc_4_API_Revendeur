@@ -105,7 +105,7 @@ def delete_user(user_id: int):
     return {"status": "success"}
 
 
-@app.put("update-user/{user_id}", tags=["users"])
+@app.put("/update-user/{user_id}", tags=["users"])
 def update_user(user_id: int):
     """
     Update a user
