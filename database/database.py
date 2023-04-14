@@ -3,6 +3,20 @@ import os
 
 
 class Db:
+    """
+    Database class
+
+    This class is used to manage the database
+    - Create tables
+    - Delete tables
+    - Insert a user
+    - Get a user by id
+    - Get a user by email
+
+    :param db_name: Database name
+    :param clear: Clear database
+    """
+
     def __init__(self, db_name, clear=False):
         if os.path.exists(db_name) and clear:
             os.remove(db_name)
@@ -10,8 +24,12 @@ class Db:
         self.cursor = self.conn.cursor()
 
     def create_tables(self):
+        """
+        Create tables
+        :return:
+        """
         query_users = '''CREATE TABLE IF NOT EXISTS users (
-                    id INTEGER,
+                    id INTEGER PRIMARY KEY,
                     email TEXT NOT NULL ,
                     token TEXT NOT NULL
                 )'''
@@ -19,32 +37,58 @@ class Db:
         self.conn.commit()
 
     def delete_tables(self):
+        """
+        Delete tables
+        :return:
+        """
         query_users = '''DROP TABLE IF EXISTS users'''
         self.cursor.execute(query_users)
         self.conn.commit()
 
     def insert_user(self, user_id, email, token):
+        """
+        Insert a user
+        :param user_id:
+        :param email:
+        :param token:
+        :return:
+        """
         query = '''INSERT INTO users (id, email, token) VALUES (?, ?, ?)'''
+        # make sure the user is unique
+        if self.get_user(user_id) is not None:
+            return False
         self.cursor.execute(query, (user_id, email, token))
         self.conn.commit()
 
     def get_user(self, user_id):
+        """
+        Get a user by id
+        :param user_id:
+        :return:
+        """
         query = '''SELECT * FROM users WHERE id = ?'''
         self.cursor.execute(query, (user_id,))
         return self.cursor.fetchone()
 
     def get_user_by_email(self, email):
+        """
+        Get a user by email
+        :param email:
+        :return:
+        """
         query = '''SELECT * FROM users WHERE email = ?'''
         self.cursor.execute(query, (email,))
         return self.cursor.fetchone()
 
-
-db = Db("../data/database", clear=True)
-db.create_tables()
-
-db.insert_user(1, "test@test.com", "token")
-print(db.get_user(1))
-print(db.get_user_by_email("test@test.com"))
-
-
-
+    def delete_user(self, user_id):
+        """
+        Delete a user by id
+        :param user_id:
+        :return:
+        """
+        query = '''DELETE FROM users WHERE id = ?'''
+        # si l'utilisateur n'existe pas
+        if self.get_user(user_id) is None:
+            return False
+        self.cursor.execute(query, (user_id,))
+        self.conn.commit()

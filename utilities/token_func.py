@@ -41,12 +41,3 @@ def token_is_valid(token):
     """
     user_id = decode_token(token)
     return user_id is not None
-
-
-# usage
-token = encode_token(1)
-print(token)
-print(decode_token("token"))
-print(token_is_valid("fr"))
-print(token_is_valid(token))
-print(decode_token(token))
