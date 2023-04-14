@@ -16,6 +16,7 @@ def send_email(target, img):
         img_data = i.read()
 
     sender = "guillaume.gay.74@gmail.com"
+    print("Sending email from " + sender + " to " + target)
     msg = MIMEMultipart()
     msg['Subject'] = "QR Code d'authentification"
     msg['From'] = sender
