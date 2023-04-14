@@ -3,7 +3,7 @@ import logging
 import uvicorn
 from typing import Annotated
 from fastapi import FastAPI, Depends
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer
 from urllib.parse import unquote
 from services.qr_code_generator import generate_qr_code
 from services.mail_sender import send_email
@@ -14,8 +14,10 @@ from utilities.utils import is_valid_email
 # api produits
 API_PRODUCT = "https://615f5fb4f7254d0017068109.mockapi.io/api/v1/products"
 
-# Partie sécurité à tester
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+API_PREFIX = "/api/v1"
+
+# Partie sécurité
+token_auth_scheme = HTTPBearer()
 
 description = """
 Documentation des APIs du projet MSPR 4. 🚀
@@ -56,28 +58,22 @@ db = Db("../data/database", clear=False)
 db.create_tables()
 
 
-# fonction pour tester la sécurité d'une api mais n'est pas testé maintenant
+# Products routes
 
 
-@app.get("/items/")
-async def read_items(token: Annotated[str, Depends(oauth2_scheme)]):
-    return {"token": token}
-
-
-# routes produits
-
-
-@app.get("/products", tags=["products"])
-def get_products():
+@app.get(f"{API_PREFIX}/products", tags=["products"])
+def get_products(token: Annotated[str, Depends(token_auth_scheme)]):
     """
     Get all products
     :return:
     """
+    if token.credentials != "admin":
+        return {"status": "error", "message": "You are not allowed to access this resource"}
     response = requests.get(API_PRODUCT)
     return response.json()
 
 
-@app.get("/products/{product_id}", tags=["products"])
+@app.get(f"{API_PREFIX}/products/{{product_id}}", tags=["products"])
 def get_product(product_id: int):
     """
     Get a product by id
@@ -88,7 +84,7 @@ def get_product(product_id: int):
     return response.json()
 
 
-@app.get("/products/{product_id}/stock", tags=["products"])
+@app.get(f"{API_PREFIX}/products/{{product_id}}/stock", tags=["products"])
 def get_product_stock(product_id: int):
     """
     Get a product stock by id
@@ -99,7 +95,7 @@ def get_product_stock(product_id: int):
     return response.json()["stock"]
 
 
-@app.post("/create-user/{user_id}/{user_email}", tags=["users"])
+@app.post(f"{API_PREFIX}/create-user/{{user_id}}/{{user_email}}", tags=["users"])
 def create_user(user_id: int, user_email: str):
     """
     Create a user
@@ -107,11 +103,6 @@ def create_user(user_id: int, user_email: str):
     :param user_email:
     :return:
     """
-    # je génère une clé d'authentification que je pourrais utiliser ensuite pour autoriser l'utilisateur à utiliser l'api
-    # je stocke la clé dans la base de données sqlite et j'envoie un mail à l'utilisateur avec le qr code
-    # le token étant stocké dans la base de données, je peux l'utiliser pour vérifier l'authentification de l'utilisateur prochainement
-    # retourner un code 200 si tout s'est bien passé
-    # retourne un autre code si erreur
 
     if not is_valid_email(user_email):
         return {"status": "error", "message": "Invalid email format"}
@@ -128,7 +119,7 @@ def create_user(user_id: int, user_email: str):
         return {"status": "error", "message": e.__repr__()}
 
 
-@app.delete("/delete-user/{user_id}", tags=["users"])
+@app.delete(f"{API_PREFIX}/delete-user/{{user_id}}", tags=["users"])
 def delete_user(user_id: int):
     """
     Delete a user
@@ -143,7 +134,7 @@ def delete_user(user_id: int):
         return {"status": "error", "message": e.__repr__()}
 
 
-@app.put("/update-user/{user_id}", tags=["users"])
+@app.put(f"{API_PREFIX}/update-user/{{user_id}}", tags=["users"])
 def update_user(user_id: int):
     """
     Update a user
@@ -151,7 +142,7 @@ def update_user(user_id: int):
     :return:
     """
     # update the user information
-    # modify the token from the database
+    # modify the token on the database
 
     return {"status": "success"}
 
