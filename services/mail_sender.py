@@ -26,7 +26,7 @@ def send_email(target, img):
     msg.attach(text)
     image = MIMEImage(img_data, name=os.path.basename(img))
     msg.attach(image)
-
+    print("Removing " + img)
     os.remove(img)
 
     server = smtplib.SMTP('smtp.gmail.com', 587)

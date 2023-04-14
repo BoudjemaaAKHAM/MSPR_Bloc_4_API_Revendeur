@@ -29,7 +29,7 @@ class Db:
         :return:
         """
         query_users = '''CREATE TABLE IF NOT EXISTS users (
-                    id INTEGER,
+                    id INTEGER PRIMARY KEY,
                     email TEXT NOT NULL ,
                     token TEXT NOT NULL
                 )'''
@@ -54,6 +54,9 @@ class Db:
         :return:
         """
         query = '''INSERT INTO users (id, email, token) VALUES (?, ?, ?)'''
+        # make sure the user is unique
+        if self.get_user(user_id) is not None:
+            return False
         self.cursor.execute(query, (user_id, email, token))
         self.conn.commit()
 

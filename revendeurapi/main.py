@@ -4,9 +4,13 @@ import uvicorn
 from typing import Annotated
 from fastapi import FastAPI, Depends
 from fastapi.security import OAuth2PasswordBearer
-from pydantic import BaseModel
+from urllib.parse import unquote
+from services.qr_code_generator import generate_qr_code
+from services.mail_sender import send_email
+from database.database import Db
+from utilities.token_func import encode_token
+from utilities.utils import is_valid_email
 
-# api mise à disposition dans le sujet
 # api produits
 API_PRODUCT = "https://615f5fb4f7254d0017068109.mockapi.io/api/v1/products"
 
@@ -47,6 +51,9 @@ app = FastAPI(
     },
     openapi_tags=tags_metadata
 )
+
+db = Db("../data/database", clear=False)
+db.create_tables()
 
 
 # fonction pour tester la sécurité d'une api mais n'est pas testé maintenant
@@ -92,10 +99,11 @@ def get_product_stock(product_id: int):
     return response.json()["stock"]
 
 
-@app.post("/create-user/{user_email}", tags=["users"])
-def create_user(user_email: str):
+@app.post("/create-user/{user_id}/{user_email}", tags=["users"])
+def create_user(user_id: int, user_email: str):
     """
     Create a user
+    :param user_id:
     :param user_email:
     :return:
     """
@@ -105,7 +113,18 @@ def create_user(user_email: str):
     # retourner un code 200 si tout s'est bien passé
     # retourne un autre code si erreur
 
-    return {"status": "success"}
+    if not is_valid_email(user_email):
+        return {"status": "error", "message": "Invalid email"}
+    try:
+        decoded_email = unquote(user_email)
+        token = encode_token(decoded_email)
+        if db.insert_user(user_id, decoded_email, token) is False:
+            return {"status": "error", "message": "User already exists on the database"}
+        generate_qr_code(token, "", "qrcode")
+        send_email(decoded_email, "./qrcode.png")
+        return {"status": "success"}
+    except Exception as e:
+        return {"status": "error", "message": e}
 
 
 @app.delete("/delete-user/{user_id}", tags=["users"])
