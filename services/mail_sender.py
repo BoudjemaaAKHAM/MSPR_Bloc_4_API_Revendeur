@@ -18,7 +18,7 @@ def send_email(target, img):
     sender = "guillaume.gay.74@gmail.com"
     print("Sending email from " + sender + " to " + target)
     msg = MIMEMultipart()
-    msg['Subject'] = "QR Code d'authentification"
+    msg['Subject'] = "MSPR : QR Code d'authentification"
     msg['From'] = sender
     msg['To'] = target
     text = MIMEText(

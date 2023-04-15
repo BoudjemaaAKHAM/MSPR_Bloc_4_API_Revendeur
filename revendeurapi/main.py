@@ -1,14 +1,20 @@
+"""
+MSPR 4 - Revendeur API
+"""
+
 import requests
 import logging
 import uvicorn
+from email.header import Header
+from functools import wraps
 from typing import Annotated
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBearer
 from urllib.parse import unquote
 from services.qr_code_generator import generate_qr_code
 from services.mail_sender import send_email
 from database.database import Db
-from utilities.token_func import encode_token
+from utilities.token_func import encode_token, decode_token
 from utilities.utils import is_valid_email
 
 # api produits
@@ -133,41 +139,94 @@ db = Db("../data/database", clear=False)
 db.create_tables()
 
 
+def admin_required(func):
+    """
+    Decorator to check if the user is admin
+    :param func:
+    :return:
+    """
+
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        admin = kwargs.get('admin') or Header(None)
+        # ajouter les conditions ici
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
+def token_required(func):
+    """
+    Decorator to check if the token is valid
+    :param func:
+    :return:
+    """
+
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        token = kwargs.get('token') or Header(None)
+        if not token:
+            raise HTTPException(status_code=401, detail='Token is missing')
+        if token.credentials == "admin":
+            return func(*args, **kwargs)
+        token_decoded = decode_token(token.credentials)
+        if token_decoded == 1:
+            raise HTTPException(status_code=401, detail='Token has expired')
+        elif token_decoded == 2:
+            raise HTTPException(status_code=401, detail='Token is not valid')
+        if db.get_user_by_email(token_decoded) is False:
+            raise HTTPException(status_code=403,
+                                detail='User has been deleted and has no rights to access this resource')
+        return func(*args, **kwargs)
+
+    return wrapper
+
+
 # Products routes
 
 
 @app.get(f"{API_PREFIX}/products", tags=["Products"])
+@token_required
 def get_products(token: Annotated[str, Depends(token_auth_scheme)]):
     """
     Get all products
-    :return:
+    :param token:
+    :return: json response
     """
-    if token.credentials != "admin":
-        return {"status": "error", "message": "You are not allowed to access this resource"}
     response = requests.get(API_PRODUCT)
     return response.json()
 
 
 @app.get(f"{API_PREFIX}/products/{{product_id}}", tags=["Products"])
-def get_product(product_id: int):
+@token_required
+def get_product(product_id: int, token: Annotated[str, Depends(token_auth_scheme)]):
     """
     Get a product by id
     :param product_id:
-    :return:
+    :param token:
+    :return: json response
     """
     response = requests.get(API_PRODUCT + "/" + str(product_id))
-    return response.json()
+    if type(response.json()) == dict:
+        return response.json()
+    else:
+        return {"status": "error", "message": "Product not found"}
 
 
 @app.get(f"{API_PREFIX}/products/{{product_id}}/stock", tags=["Products"])
-def get_product_stock(product_id: int):
+@token_required
+def get_product_stock(product_id: int, token: Annotated[str, Depends(token_auth_scheme)]):
     """
     Get a product stock by id
     :param product_id:
-    :return:
+    :param token:
+    :return: json response
     """
     response = requests.get(API_PRODUCT + "/" + str(product_id))
-    return response.json()["stock"]
+    if type(response.json()) == dict:
+        return response.json()["stock"]
+    else:
+        return {"status": "error", "message": "Product not found"}
 
 
 @app.post(f"{API_PREFIX}/create-user/{{user_id}}/{{user_email}}", tags=["Users"])
