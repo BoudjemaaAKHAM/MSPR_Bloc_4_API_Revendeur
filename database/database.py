@@ -78,7 +78,10 @@ class Db:
         """
         query = '''SELECT * FROM users WHERE email = ?'''
         self.cursor.execute(query, (email,))
-        return self.cursor.fetchone()
+        user = self.cursor.fetchone()
+        if user is None:
+            return False
+        return user
 
     def delete_user(self, user_id):
         """
