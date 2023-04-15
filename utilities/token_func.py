@@ -1,17 +1,18 @@
 import os
 import jwt
+import datetime
 
 with open(os.path.join(os.path.dirname(__file__), '.secret.txt'), 'r') as f:
     secret_key = f.read()
 
 
-def encode_token(user_id):
+def encode_token(user_email):
     """
     Encode a token for a user
-    :param user_id:
+    :param user_email
     :return:
     """
-    payload = {'user_id': user_id}
+    payload = {'user_email': user_email, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=30)}
     token = jwt.encode(payload, secret_key, algorithm='HS256')
     return token
 
@@ -24,7 +25,7 @@ def decode_token(token):
     """
     try:
         payload = jwt.decode(token, secret_key, algorithms=['HS256'])
-        return payload['user_id']
+        return payload['user_email']
     except jwt.ExpiredSignatureError:
         # Le jeton a expiré
         return None
