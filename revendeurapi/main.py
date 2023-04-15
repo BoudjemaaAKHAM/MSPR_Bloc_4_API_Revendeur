@@ -20,25 +20,100 @@ API_PREFIX = "/api/v1"
 token_auth_scheme = HTTPBearer()
 
 description = """
-Documentation des APIs du projet MSPR 4. 🚀
+Documentation de l'API Revendeur du projet MSPR 4. 🚀
 
 ## Products
 
-You will be able to **read products**.
+ - The user will be able to **read products** if he has a valid token.
+
+url: /api/v1/products
+
+call the api with curl:
+```shell
+curl -X 'GET' \
+  'http://localhost:82/api/v1/products' \
+  -H 'accept: application/json' \
+  -H 'Authorization: Bearer put_token_here'
+```
+
+- The user will be able to get a **product by id** if he has a valid token.
+
+url: /api/v1/products/{product_id}
+
+call the api with curl:
+```shell
+curl -X 'GET' \
+    'http://localhost:82/api/v1/products/1' \
+    -H 'accept: application/json' \
+    -H 'Authorization: Bearer put_token_here'
+```
+
+- The user will be able to get a **product stock by id** if he has a valid token.
+
+url: /api/v1/products/{product_id}/stock
+
+call the api with curl:
+```shell
+curl -X 'GET' \
+    'http://localhost:82/api/v1/products/1/stock' \
+    -H 'accept: application/json' \
+    -H 'Authorization: Bearer put_token_here'
+```
 
 ## Users
 
 You will be able to **create / delete / update users** if you have the admin rights
 
+- The admin will be able to **create a user** if he has the correct rights.
+
+**description:**s
+when this api is called, the user will be created and an email will be sent to the user with a qr code containing the token.
+
+
+
+url: /api/v1/create-user/{user_id}/{user_email}
+
+call the api with curl:
+```shell
+curl -X 'POST' \
+    'http://localhost:82/api/v1/create-user/1/boudjemaa.akham@epsi.fr' \
+    -H 'accept: application/json' \
+    -H 'Authorization: Bearer admin'
+```
+
+- The admin will be able to **delete a user** if he has the correct rights.
+
+url: /api/v1/delete-user/{user_id}
+
+call the api with curl:
+```shell
+curl -X 'DELETE' \
+    'http://localhost:82/api/v1/delete-user/1' \
+    -H 'accept: application/json' \
+    -H 'Authorization: Bearer admin'
+```
+
+- The admin will be able to **update a user** if he has the correct rights.
+
+url: /api/v1/update-user/{user_id}
+
+call the api with curl:
+```shell
+curl -X 'PUT' \
+    'http://localhost:82/api/v1/update-user/1' \
+    -H 'accept: application/json' \
+    -H 'Authorization: Bearer admin'
+```
+
 """
 
 tags_metadata = [
     {
-        "name": "products",
+        "name": "Products",
         "description": "Manage products.",
     },
     {
-        "name": "users",
+        "name": "Users",
         "description": "Manage users.",
     }
 ]
@@ -61,7 +136,7 @@ db.create_tables()
 # Products routes
 
 
-@app.get(f"{API_PREFIX}/products", tags=["products"])
+@app.get(f"{API_PREFIX}/products", tags=["Products"])
 def get_products(token: Annotated[str, Depends(token_auth_scheme)]):
     """
     Get all products
@@ -73,7 +148,7 @@ def get_products(token: Annotated[str, Depends(token_auth_scheme)]):
     return response.json()
 
 
-@app.get(f"{API_PREFIX}/products/{{product_id}}", tags=["products"])
+@app.get(f"{API_PREFIX}/products/{{product_id}}", tags=["Products"])
 def get_product(product_id: int):
     """
     Get a product by id
@@ -84,7 +159,7 @@ def get_product(product_id: int):
     return response.json()
 
 
-@app.get(f"{API_PREFIX}/products/{{product_id}}/stock", tags=["products"])
+@app.get(f"{API_PREFIX}/products/{{product_id}}/stock", tags=["Products"])
 def get_product_stock(product_id: int):
     """
     Get a product stock by id
@@ -95,7 +170,7 @@ def get_product_stock(product_id: int):
     return response.json()["stock"]
 
 
-@app.post(f"{API_PREFIX}/create-user/{{user_id}}/{{user_email}}", tags=["users"])
+@app.post(f"{API_PREFIX}/create-user/{{user_id}}/{{user_email}}", tags=["Users"])
 def create_user(user_id: int, user_email: str):
     """
     Create a user
@@ -119,7 +194,7 @@ def create_user(user_id: int, user_email: str):
         return {"status": "error", "message": e.__repr__()}
 
 
-@app.delete(f"{API_PREFIX}/delete-user/{{user_id}}", tags=["users"])
+@app.delete(f"{API_PREFIX}/delete-user/{{user_id}}", tags=["Users"])
 def delete_user(user_id: int):
     """
     Delete a user
@@ -134,7 +209,7 @@ def delete_user(user_id: int):
         return {"status": "error", "message": e.__repr__()}
 
 
-@app.put(f"{API_PREFIX}/update-user/{{user_id}}", tags=["users"])
+@app.put(f"{API_PREFIX}/update-user/{{user_id}}", tags=["Users"])
 def update_user(user_id: int):
     """
     Update a user
