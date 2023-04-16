@@ -182,6 +182,12 @@ def token_required(func):
     return wrapper
 
 
+# route principale
+@app.get("/")
+def root():
+    return {"message": "Welcome to the MSPR API"}
+
+
 # Products routes
 
 
