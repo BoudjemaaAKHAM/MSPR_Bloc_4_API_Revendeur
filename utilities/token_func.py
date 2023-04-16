@@ -12,7 +12,7 @@ def encode_token(user_id):
     :param user_id
     :return:
     """
-    payload = {'user_id': user_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60)}
+    payload = {'user_id': user_id, 'exp': datetime.datetime.utcnow() + datetime.timedelta(days=60)}
     token = jwt.encode(payload, secret_key, algorithm='HS256')
     return token
 
