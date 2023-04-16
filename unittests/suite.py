@@ -11,7 +11,7 @@ def suite():
     return suite
 
 
-if __name__ == "__main__":
+#if __name__ == "__main__":
     # Define the XMLTestRunner with output directory 'test-reports'
     runner = xmlrunner.XMLTestRunner(output='test-reports', verbosity=2)
 
