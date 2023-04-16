@@ -79,3 +79,12 @@ docker tag revendeur_api boudjemaa/revendeur_api:latest
 docker push boudjemaa/revendeur_api:latest
 ```
 
+### Run container on production server
+
+```bash
+docker pull boudjemaa/revendeur_api:latest
+```
+
+```bash
+docker run -d --name revendeurapi --restart=always -p 443:443 boudjemaa/revendeur_api
+```
