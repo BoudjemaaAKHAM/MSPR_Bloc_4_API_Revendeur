@@ -1,4 +1,5 @@
 import unittest
 
-if __name__ == '__main__':
-    unittest.main()
+class TestDummy(unittest.TestCase):
+    def test_dummy(self):
+        self.assertTrue(True)
