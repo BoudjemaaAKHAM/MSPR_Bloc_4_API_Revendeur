@@ -7,5 +7,5 @@ setup(
     author='',
     packages=find_packages(),
     include_package_data=True,
-    install_requires=['fastapi', 'uvicorn', 'requests', 'pydantic', "qrcode", "PyJWT", "setuptools"]
+    install_requires=['fastapi', 'uvicorn', 'requests', 'pydantic', "qrcode", "PyJWT", "setuptools", 'xmlrunner']
 )
