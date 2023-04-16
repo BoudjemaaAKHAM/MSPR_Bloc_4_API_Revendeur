@@ -17,8 +17,3 @@ if __name__ == "__main__":
 
     # Run the test suite using the XMLTestRunner
     runner.run(suite())
-else:
-    runner = xmlrunner.XMLTestRunner(output='test-reports', verbosity=2)
-
-    # Run the test suite using the XMLTestRunner
-    runner.run(suite())
