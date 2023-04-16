@@ -148,8 +148,12 @@ def admin_required(func):
 
     @wraps(func)
     async def wrapper(*args, **kwargs):
-        admin = kwargs.get('admin') or Header(None)
-        # ajouter les conditions ici
+        token = kwargs.get('token') or Header(None)
+        if not token:
+            raise HTTPException(status_code=401, detail='Token is missing')
+        if token.credentials != "admin":
+            raise HTTPException(status_code=403, detail='You are not admin')
+
         return func(*args, **kwargs)
 
     return wrapper
@@ -180,6 +184,12 @@ def token_required(func):
         return func(*args, **kwargs)
 
     return wrapper
+
+
+# route principale
+@app.get("/")
+def root():
+    return {"message": "Welcome to the MSPR API"}
 
 
 # Products routes
@@ -230,11 +240,13 @@ def get_product_stock(product_id: int, token: Annotated[str, Depends(token_auth_
 
 
 @app.post(f"{API_PREFIX}/create-user/{{user_id}}/{{user_email}}", tags=["Users"])
-def create_user(user_id: int, user_email: str):
+@admin_required
+def create_user(user_id: int, user_email: str, token: Annotated[str, Depends(token_auth_scheme)]):
     """
     Create a user
     :param user_id:
     :param user_email:
+    :param token:
     :return:
     """
 
@@ -254,10 +266,12 @@ def create_user(user_id: int, user_email: str):
 
 
 @app.delete(f"{API_PREFIX}/delete-user/{{user_id}}", tags=["Users"])
-def delete_user(user_id: int):
+@admin_required
+def delete_user(user_id: int, token: Annotated[str, Depends(token_auth_scheme)]):
     """
     Delete a user
     :param user_id:
+    :param token:
     :return:
     """
     try:
@@ -269,10 +283,12 @@ def delete_user(user_id: int):
 
 
 @app.put(f"{API_PREFIX}/update-user/{{user_id}}", tags=["Users"])
-def update_user(user_id: int):
+@token_required
+def update_user(user_id: int, token: Annotated[str, Depends(token_auth_scheme)]):
     """
     Update a user
     :param user_id:
+    :param token:
     :return:
     """
     # update the user information
