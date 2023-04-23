@@ -96,7 +96,6 @@ class Db:
         query = '''SELECT * FROM users WHERE email = ?'''
         self.cursor.execute(query, (email,))
         user = self.cursor.fetchone()
-        print(user)
         if user is None:
             return False
         return user

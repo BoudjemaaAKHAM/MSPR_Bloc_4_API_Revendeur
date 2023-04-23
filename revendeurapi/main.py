@@ -135,7 +135,7 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 
-db = Db('../data/database', clear=False)
+db = Db('data/database', clear=False)
 db.__enter__()
 db.create_tables()
 

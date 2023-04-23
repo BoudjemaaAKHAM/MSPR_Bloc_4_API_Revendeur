@@ -5,7 +5,7 @@ from database.database import Db
 
 @pytest.fixture(scope="module")
 def db():
-    db = Db('data/database', clear=True)
+    db = Db('data/database', clear=False)
     db.__enter__()
     db.create_tables()
     yield db
