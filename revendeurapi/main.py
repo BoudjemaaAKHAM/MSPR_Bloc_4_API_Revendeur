@@ -135,8 +135,14 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 
-db = Db("../data/database", clear=False)
+db = Db('data/database', clear=False)
+db.__enter__()
 db.create_tables()
+
+
+@app.on_event("shutdown")
+def shutdown_event():
+    db.__exit__(None, None, None)
 
 
 def admin_required(func):
@@ -171,8 +177,9 @@ def token_required(func):
         token = kwargs.get('token') or Header(None)
         if not token:
             raise HTTPException(status_code=401, detail='Token is missing')
-        if token.credentials == "admin":
-            return func(*args, **kwargs)
+        # TODO: a verifier si ça empeche pas les autres api de rester connecté
+        # if token.credentials == "admin":
+        #    return func(*args, **kwargs)
         token_decoded = decode_token(token.credentials)
         if token_decoded == 1:
             raise HTTPException(status_code=401, detail='Token has expired')
@@ -283,7 +290,7 @@ def delete_user(user_id: int, token: Annotated[str, Depends(token_auth_scheme)])
 
 
 @app.put(f"{API_PREFIX}/update-user/{{user_id}}", tags=["Users"])
-@token_required
+@admin_required
 def update_user(user_id: int, token: Annotated[str, Depends(token_auth_scheme)]):
     """
     Update a user

@@ -40,6 +40,18 @@ python -m revendeurapi.main
 5- les routes de l'API et la documentation sont disponibles à l'adresse suivante :
 http://localhost:82/docs
 
+6- Pour lancer les tests unitaires :
+
+```bash
+py -m pytest ./unittests -v --junit-xml ./unittests/report.xml
+```
+
+7- lancer les tests unitaires avec coverage :
+
+```bash
+py -m pytest ./unittests -v --junit-xml ./unittests/report.xml --cov=. --cov-report=html
+```
+
 ### Utilisation de l'application avec Docker :
 
 1- Créer l'image Docker :
@@ -79,3 +91,12 @@ docker tag revendeur_api boudjemaa/revendeur_api:latest
 docker push boudjemaa/revendeur_api:latest
 ```
 
+### Run container on production server
+
+```bash
+docker pull boudjemaa/revendeur_api:latest
+```
+
+```bash
+docker run -d --name revendeurapi --restart=always -p 443:443 boudjemaa/revendeur_api
+```
