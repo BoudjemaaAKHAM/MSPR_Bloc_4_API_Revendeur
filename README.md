@@ -46,6 +46,12 @@ http://localhost:82/docs
 py -m pytest ./unittests -v --junit-xml ./unittests/report.xml
 ```
 
+7- lancer les tests unitaires avec coverage :
+
+```bash
+py -m pytest ./unittests -v --junit-xml ./unittests/report.xml --cov=. --cov-report=html
+```
+
 ### Utilisation de l'application avec Docker :
 
 1- Créer l'image Docker :
