@@ -3,9 +3,13 @@ import pytest
 from database.database import Db
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def db():
-    return Db(':memory:', clear=True)
+    db = Db('data/database', clear=True)
+    db.__enter__()
+    db.create_tables()
+    yield db
+    db.__exit__(None, None, None)
 
 
 def test_create_tables(db):
@@ -38,8 +42,8 @@ def test_get_user(db):
 
 def test_get_user_by_email(db):
     db.create_tables()
-    db.insert_user(1, 'email', 'token')
-    assert db.get_user_by_email('email') == (1, 'email', 'token')
+    db.insert_user(100, 'email', 'token')
+    assert db.get_user_by_email('email') == (100, 'email', 'token')
     assert db.get_user_by_email('email2') is False
 
 

@@ -18,10 +18,27 @@ class Db:
     """
 
     def __init__(self, db_name, clear=False):
-        if os.path.exists(db_name) and clear:
-            os.remove(db_name)
-        self.conn = sqlite3.connect(db_name, check_same_thread=False)
+        self.db_name = db_name
+        self.conn = None
+        self.cursor = None
+        self.clear = clear
+
+    def __enter__(self):
+        db_path = os.path.join(os.getcwd(), self.db_name)
+        if self.clear:
+            os.remove(db_path)
+        self.conn = sqlite3.connect(db_path, check_same_thread=False)
         self.cursor = self.conn.cursor()
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        self.conn.close()
+
+    # def __init__(self, db_name, clear=False):
+    #    if os.path.exists(db_name) and clear:
+    #        os.remove(db_name)
+    #    self.conn = sqlite3.connect(db_name, check_same_thread=False)
+    #    self.cursor = self.conn.cursor()
 
     def create_tables(self):
         """
@@ -79,6 +96,7 @@ class Db:
         query = '''SELECT * FROM users WHERE email = ?'''
         self.cursor.execute(query, (email,))
         user = self.cursor.fetchone()
+        print(user)
         if user is None:
             return False
         return user
