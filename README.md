@@ -1,4 +1,4 @@
-# MSPR_Bloc_4_API_Revendeur
+# MSPR_Bloc_4_API_Revendeur 
 
 Ce repository contient le code source de l'API Revendeur.
 
