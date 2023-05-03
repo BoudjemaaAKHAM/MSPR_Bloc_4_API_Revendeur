@@ -1,13 +1,6 @@
 pipeline {
     agent any
-
     stages {
-       // stage('Checkout') {
-       //     steps {
-       //     git branch: 'dev_boudj', url: 'https://github.com/BoudjemaaAKHAM/MSPR_Bloc_4_API_Revendeur.git'
-       //     }
-       // }
-
         stage('Prepare build environment') {
             steps {
                 //bat 'pip install -r requirements.txt'
@@ -20,10 +13,9 @@ pipeline {
                 bat 'python --version'
                 bat 'pytest --version'
                 bat 'pip install pytest'
-                //bat 'python -m unittest discover -v .\\unittests\\'
+
                 bat 'pytest --version'
-               // bat 'python .\\unittests\\suite.py'
-                //junit 'test-reports/**/*.xml'
+
                 bat 'python -m pytest .\\unittests -v --junit-xml .\\unittests\\report.xml --cov=. --cov-report=html'
                 junit '/**/*.xml'
             }
