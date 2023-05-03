@@ -17,11 +17,11 @@ pipeline {
 
         stage('Run unittests') {
             steps {
-                bat 'python --version'
-                bat 'pytest --version'
-                bat 'pip install pytest'
+                //bat 'python --version'
+                //bat 'pytest --version'
+                //bat 'pip install pytest'
                 //bat 'python -m unittest discover -v .\\unittests\\'
-                bat 'pytest --version'
+                //bat 'pytest --version'
                // bat 'python .\\unittests\\suite.py'
                 //junit 'test-reports/**/*.xml'
                 bat 'python -m pytest .\\unittests -v --junit-xml .\\unittests\\report.xml --cov=. --cov-report=html'
