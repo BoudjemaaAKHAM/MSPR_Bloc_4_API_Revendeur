@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   # define deployment name and the desired namespace
-  name: revendeur-api
+  name: revendeur-api-deployement
   namespace: services
 spec:
   # define the number of replicas. With this parameter we can scale the application.
