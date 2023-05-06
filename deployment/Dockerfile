@@ -10,7 +10,7 @@ COPY revendeurapi revendeurapi
 COPY services services
 COPY ssl ssl
 COPY utilities utilities
-
+COPY requirements.txt requirements.txt
 COPY setup.py setup.py
 
 RUN pip install -e .
