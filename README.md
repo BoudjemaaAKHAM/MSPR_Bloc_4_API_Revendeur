@@ -100,3 +100,30 @@ docker pull boudjemaa/revendeur_api:latest
 ```bash
 docker run -d --name revendeurapi --restart=always -p 443:443 boudjemaa/revendeur_api
 ```
+
+## Utilisation de l'application avec Kubernetes :
+
+### Prérequis
+
+- minikube
+- kubectl
+
+### Lancement du cluster
+
+```sh
+minikube start
+```
+
+### Déploiement de l'application
+
+```sh
+kubectl apply -f deployment/k8s-deployment.yaml
+```
+
+### Accès à l'application
+
+```sh
+minikube service webshop-api
+```
+
+ou via lens (https://k8slens.dev/) application desktop pour kubernetes
