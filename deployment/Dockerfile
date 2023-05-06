@@ -4,7 +4,7 @@ WORKDIR /app
 
 RUN pip install --upgrade pip
 
-COPY data ../data
+COPY data data
 COPY database database
 COPY revendeurapi revendeurapi
 COPY services services
