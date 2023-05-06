@@ -15,6 +15,17 @@ Ce repository contient le code source de l'API Revendeur.
 L'API Revendeur permet de gérer les utilisateurs de l'application mobile.
 Elle permet ensuite d'exposer aux revendeurs authentifiés les informations sur les produits et les stocks.
 
+### Pratiques de développement (gitflow) :
+
+- La branche main est la branche de production.
+- La branche preprod est la branche de pré-production.
+- Les branches de développement sont les branches nomées par les noms des développeurs. Chaque développeur a sa branche
+  de développement pour développer les fonctionnalités qui lui sont assignées.
+- Les branches nomées fix sont les branches de correction de bugs. Elles sont créées à partir de la branche de
+  développement du développeur qui a corrigé le bug.
+- Les branches nomées test sont les branches de test. Elles sont créées à partir de la branche de développement du
+  développeur qui a développé la fonctionnalité à tester.
+
 ### Utilisation de l'application :
 
 1- Cloner le repository : (Demander l'accès au repository à l'un des membres du groupe))
