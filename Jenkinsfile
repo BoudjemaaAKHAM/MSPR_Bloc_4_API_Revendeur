@@ -18,6 +18,7 @@ pipeline {
         stage('Creer un tag git pour l application') {
             when {
                 branch 'main'
+                branch 'pre-prod'
             }
             steps {
                 script {
