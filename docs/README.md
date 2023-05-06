@@ -30,5 +30,34 @@ http://localhost:82/api/v1/create-user/{user_id}/{user_email}
 Vous devez remplacer {user_id} et {user_email} par les valeurs de votre choix. Il faut utiliser une adresse email
 valide.
 
-Le token à utiliser est : admin
+Cliquer sur l'icone cadnas pour ouvrir la fenêtre d'authentification.
+
+Puis saisir le token à utiliser est : admin
+
+![img.png](imgs/img1.png)
+
+Cliquer sur Authorize pour valider.
+
+Cliquer sur Try it out pour exécuter la requête.
+![img.png](imgs/img2.png)
+
+Si la requête est exécutée avec succès, vous devriez voir le message suivant :
+![img.png](imgs/img3.png)
+
+3 - Pour requeter les APIs Produit :
+
+Scannez le QR code recu par email avec votre smartphone. Récupérez le token et utilisez le pour requeter les APIs
+Produits.
+
+Déconnectez vous avec le token admin et reconnectez vous avec le token produit.
+
+![img.png](imgs/img4.png)
+
+Vous pouvez maintenant tester les APIs Produits.
+
+Si la requête est exécutée avec succès, vous devriez voir le message suivant :
+
+![img.png](imgs/img5.png)
+
+4 - Vous pouvez refaire les memes étapes pour tester les APIs Produits avec ID et le stock des produits.
 
