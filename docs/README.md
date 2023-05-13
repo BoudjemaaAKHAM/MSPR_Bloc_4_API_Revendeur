@@ -44,6 +44,9 @@ Cliquer sur Try it out pour exécuter la requête.
 Si la requête est exécutée avec succès, vous devriez voir le message suivant :
 ![img.png](imgs/img3.png)
 
+Vérifiez votre addresse mail et vous allez recevoir le qr code contenant le token d'authentication :
+![image](https://github.com/BoudjemaaAKHAM/MSPR_Bloc_4_API_Revendeur/assets/51098568/76990c5e-c52a-4716-aeeb-550b37709bf1)
+
 3 - Pour requeter les APIs Produit :
 
 Scannez le QR code recu par email avec votre smartphone. Récupérez le token et utilisez le pour requeter les APIs
