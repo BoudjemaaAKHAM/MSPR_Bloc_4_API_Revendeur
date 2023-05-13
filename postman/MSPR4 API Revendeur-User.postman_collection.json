@@ -1,0 +1,216 @@
+{
+	"info": {
+		"_postman_id": "8acf20e8-140b-4bd9-a16a-af785e4bf4cd",
+		"name": "MSPR4 API Revendeur-User",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15732564"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "read products",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoic2ViYXN0aWVuLmdsb3JpZXNAZXBzaS5mciIsImV4cCI6MTY4OTE5NDA0NX0.2ZMnhAT89vu1XNdx_zuyLqFjWYMuavTZGBVsy2HTxHI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:82/api/v1/products",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "82",
+							"path": [
+								"api",
+								"v1",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "read product by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoic2ViYXN0aWVuLmdsb3JpZXNAZXBzaS5mciIsImV4cCI6MTY4OTE5NDA0NX0.2ZMnhAT89vu1XNdx_zuyLqFjWYMuavTZGBVsy2HTxHI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:82/api/v1/products/7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "82",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"7"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "read product stock by id",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoic2ViYXN0aWVuLmdsb3JpZXNAZXBzaS5mciIsImV4cCI6MTY4OTE5NDA0NX0.2ZMnhAT89vu1XNdx_zuyLqFjWYMuavTZGBVsy2HTxHI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:82/api/v1/products/7/stock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "82",
+							"path": [
+								"api",
+								"v1",
+								"products",
+								"7",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Create Users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:82/api/v1/create-user/34/sebastien.glories@epsi.fr",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "82",
+							"path": [
+								"api",
+								"v1",
+								"create-user",
+								"34",
+								"sebastien.glories@epsi.fr"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:82/api/v1/delete-user/34",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "82",
+							"path": [
+								"api",
+								"v1",
+								"delete-user",
+								"34"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update a user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:82/api/v1/update-user/34",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "82",
+							"path": [
+								"api",
+								"v1",
+								"update-user",
+								"34"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
