@@ -1,6 +1,6 @@
 ### Collection: Postman
 
-Ce dossier contient les collections Postman pour l'API Webshop.
+Ce dossier contient les collections Postman pour l'API Revendeur.
 
 ### Utilisation des collections Postman :
 
